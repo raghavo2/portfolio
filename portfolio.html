@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name - Opticlick Photography Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --font-size: 16px;
+            --background: #ffffff;
+            --foreground: #242424;
+            --card: #ffffff;
+            --card-foreground: #242424;
+            --primary: #030213;
+            --primary-foreground: #ffffff;
+            --secondary: #f5f5f7;
+            --secondary-foreground: #030213;
+            --muted: #ececf0;
+            --muted-foreground: #717182;
+            --accent: #e9ebef;
+            --accent-foreground: #030213;
+            --border: rgba(0, 0, 0, 0.1);
+            --radius: 0.625rem;
+            --opticlick-orange: #ffd3c3;
+            --opticlick-blue: #004e98;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            font-size: var(--font-size);
+            line-height: 1.5;
+            color: var(--foreground);
+            background-color: var(--background);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: darkorange;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            font-size: 0.875rem;
+            color: var(--foreground);
+            text-decoration: none;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            color: var(--opticlick-orange);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: var(--radius);
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--opticlick-orange);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #e55a2b;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--foreground);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--accent);
+        }
+
+        .btn-lg {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .mobile-menu {
+            display: block;
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Styles */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            color: white;
+            max-width: 64rem;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 600;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title .italic {
+            font-style: italic;
+            color: var(--opticlick-orange);
+        }
+
+        .hero-description {
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            max-width: 32rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .opticlick-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40%, 43% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            70% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+            90% {
+                transform: translateX(-50%) translateY(-2px);
+            }
+        }
+
+        /* Portfolio Styles */
+        .portfolio {
+            padding: 5rem 1.5rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .portfolio-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background-color: var(--opticlick-orange);
+            color: white;
+            border-color: var(--opticlick-orange);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .portfolio-item {
+            position: relative;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .portfolio-item:hover {
+            transform: scale(1.02);
+        }
+
+        .portfolio-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .portfolio-item-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 107, 53, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .portfolio-item:hover .portfolio-item-overlay {
+            opacity: 1;
+        }
+
+        .portfolio-item-title {
+            color: white;
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        /* About Styles */
+        .about {
+            padding: 5rem 1.5rem;
+            background-color: var(--muted);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-content h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-content p {
+            font-size: 1.125rem;
+            margin-bottom: 1.5rem;
+            color: var(--foreground);
+        }
+
+        .opticlick-highlight {
+            background: linear-gradient(120deg, darkorange, var(--opticlick-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--opticlick-orange);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--opticlick-blue);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image img {
+            width: 100%;
+            aspect-ratio: 4/5;
+            object-fit: cover;
+            border-radius: var(--radius);
+        }
+
+        .equipment-card {
+            position: absolute;
+            bottom: -1.5rem;
+            right: -1.5rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 18rem;
+            border-top: 3px solid var(--opticlick-orange);
+        }
+
+        .equipment-card h4 {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--opticlick-blue);
+        }
+
+        .equipment-list {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            line-height: 1.6;
+        }
+
+        /* Contact Styles */
+        .contact {
+            padding: 5rem 1.5rem;
+        }
+
+        .contact-intro {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .contact-intro h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .contact-intro p {
+            font-size: 1.125rem;
+            color: var(--muted-foreground);
+            max-width: 32rem;
+            margin: 0 auto;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            max-width: 72rem;
+            margin: 0 auto;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--opticlick-orange);
+        }
+
+        .form-textarea {
+            min-height: 8rem;
+            resize: vertical;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .contact-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .contact-icon {
+            background: rgba(255, 107, 53, 0.1);
+            padding: 0.75rem;
+            border-radius: var(--radius);
+            flex-shrink: 0;
+            color: var(--opticlick-orange);
+        }
+
+        .contact-details h3 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-details p {
+            color: var(--muted-foreground);
+        }
+
+        .social-links {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-links h3 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--foreground);
+            transition: all 0.2s;
+        }
+
+        .social-btn:hover {
+            background-color: var(--opticlick-orange);
+            color: white;
+            border-color: var(--opticlick-orange);
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: linear-gradient(135deg, var(--opticlick-blue), var(--primary));
+            color: var(--primary-foreground);
+            padding: 3rem 1.5rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3,
+        .footer-section h4 {
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1rem;
+            max-width: 28rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--opticlick-orange);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer-social a {
+            color: rgba(255, 255, 255, 0.8);
+            transition: color 0.2s;
+        }
+
+        .footer-social a:hover {
+            color: var(--opticlick-orange);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 2rem;
+            padding-top: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+
+            .mobile-menu {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 4.5rem;
+            }
+
+            .hero-description {
+                font-size: 1.25rem;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Hidden class for filtering */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <a href="#" class="logo">Raghav Solanki</a>
+            <div class="nav-links">
+                <a href="#portfolio" class="nav-link" onclick="scrollToSection('portfolio')">Portfolio</a>
+                <a href="#about" class="nav-link" onclick="scrollToSection('about')">About</a>
+                <a href="#contact" class="nav-link" onclick="scrollToSection('contact')">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <img src="imgs/1.jpg"
+            alt="Student photographer at work" class="hero-bg">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="italic">One Shot. One Story. Infinite Memories</span>
+            </h1>
+            <p class="hero-description">
+                Every photo is more than an image — it’s a story frozen in time. I capture the raw emotions, fleeting moments, and unforgettable memories that you’ll want to relive forever.    
+            </p>
+        </div>
+        <div class="scroll-indicator">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio">
+        <div class="container">
+            <h2 class="section-title">My Portfolio</h2>
+            <div class="portfolio-grid">
+                <div class="portfolio-item" data-category="events">
+                    <img src="./imgs/IMG_20250715_185629008.jpg"
+                        alt="College Event Photography">
+                    <div class="portfolio-item-overlay">
+                        <div class="portfolio-item-title">Annual Fest Coverage</div>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="portraits">
+                    <img src="./imgs/IMG_20250824_175407053.jpg"
+                        alt="Student Portrait">
+                    <div class="portfolio-item-overlay">
+                        <div class="portfolio-item-title">Student Portraits</div>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="campus">
+                    <img src="./imgs/IMG_20241114_152814291.jpg"
+                        alt="Campus Architecture">
+                    <div class="portfolio-item-overlay">
+                        <div class="portfolio-item-title">Campus Architecture</div>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="street">
+                    <img src="./imgs/IMG_20250125_110858881.jpg"
+                        alt="Street Photography">
+                    <div class="portfolio-item-overlay">
+                        <div class="portfolio-item-title">Street Stories</div>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="nature">
+                    <img src="./imgs/IMG_20250707_193658678.jpg"
+                        alt="Nature Photography">
+                    <div class="portfolio-item-overlay">
+                        <div class="portfolio-item-title">Nature Escapes</div>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="events">
+                    <img src="./imgs/IMG_20240112_065241806.jpg"
+                        alt="Cultural Event">
+                    <div class="portfolio-item-overlay">
+                        <div class="portfolio-item-title">Cultural Performances</div>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="events">
+                    <img src="./imgs/IMG_20250730_104339876.jpg"
+                        alt="Cultural Event">
+                    <div class="portfolio-item-overlay">
+                        <div class="portfolio-item-title">Cultural Performances</div>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="events">
+                    <img src="./imgs/IMG_20250725_090737296.jpg"
+                        alt="Cultural Event">
+                    <div class="portfolio-item-overlay">
+                        <div class="portfolio-item-title">Cultural Performances</div>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="events">
+                    <img src="./imgs/IMG_20250725_084539281.jpg"
+                        alt="Cultural Event">
+                    <div class="portfolio-item-overlay">
+                        <div class="portfolio-item-title">Cultural Performances</div>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="events">
+                    <img src="./imgs/IMG_20250725_085912888.jpg"
+                        alt="Cultural Event">
+                    <div class="portfolio-item-overlay">
+                        <div class="portfolio-item-title">Cultural Performances</div>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="events">
+                    <img src="./imgs/IMG_20250705_213335066.jpg"
+                        alt="Cultural Event">
+                    <div class="portfolio-item-overlay">
+                        <div class="portfolio-item-title">Cultural Performances</div>
+                    </div>
+                </div>
+                <div class="portfolio-item" data-category="events">
+                    <img src="./imgs/IMG_20250502_015300632_HDR.jpg"
+                        alt="Cultural Event">
+                    <div class="portfolio-item-overlay">
+                        <div class="portfolio-item-title">Cultural Performances</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content">
+                    <h2>About Me</h2>
+                    <p>
+                        Hi, I’m <span class="opticlick-highlight">Raghav Solanki</span>, currently pursuing Computer Science Engineering. 
+                        Beyond code and algorithms, I find myself drawn to the art of storytelling through photography. 
+                        What started as a casual hobby soon became a way for me to explore perspectives, emotions, and creativity. 
+                        I love experimenting with different styles — portraits, landscapes, and candid street shots. 
+                        Each photo I take is not just about freezing a moment, but about seeing the world from a fresh angle. 
+                        Being part of Opticlick is my step toward growing as a photographer while learning from others. 
+                        With my tech background, I also explore the intersection of AI and art, aiming to merge creativity with innovation in the future.
+                    </p>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">3</div>
+                            <div class="stat-label">Years Active</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">100%</div>
+                            <div class="stat-label">Passion & Curiosity</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">∞</div>
+                            <div class="stat-label">Stories to Capture</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="./imgs/dp.jpg"
+                        alt="Student photographer portrait">
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Contact Section -->
+<section id="contact" class="contact">
+    <div class="container">
+        <div class="contact-intro">
+            <h2>Let’s Connect</h2>
+        </div>
+
+
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <div class="contact-details">
+                        <h3>Location</h3>
+                        <p>Rohini, Delhi, India</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">✉️</div>
+                    <div class="contact-details">
+                        <h3>Email</h3>
+                        <p>raghavsolanki005@gmail.com</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📞</div>
+                    <div class="contact-details">
+                        <h3>Phone</h3>
+                        <p>+91 9785247498</p>
+                    </div>
+                </div>
+                <div class="social-links">
+                    <h3>Follow Me</h3>
+                    <div class="social-buttons">
+                        <a href="https://www.instagram.com/raghav__o2" class="social-btn"><img src="./imgs/instagram.png" style="width: 50px;" alt=""></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</section>
+
+</body>
+</html>
+    
